@@ -20,7 +20,7 @@ int factorial(int num)
 
 }
 
-void p(int c)
+void p(int c) //With recursion, whatever comes before the function call gets called while opening the 
 {
     if (c == 0)
     {
@@ -35,6 +35,32 @@ void p(int c)
     } 
 }
 
+int mult(int a, int b)
+{
+    int sum = 0;
+    if (b >= 1 && a >= 1)
+    {
+        sum = a + mult(a, b - 1);
+    }
+
+    return;
+}
+
+void nb(int n, int d )
+{
+    int numDigits;
+    if (n == 0)
+    {
+        return;
+    }
+
+    else
+    {
+        std::cout << n/d << std::endl;
+        nb(n % d, d / 10 );
+    }
+}
+
 //Recursive factorial function
 int main(int argc, char* argv[])
 {
@@ -45,4 +71,6 @@ int main(int argc, char* argv[])
     std::cout << factorial(input) << std::endl;
 
     p(4);
+
+    nb(472, 100);
 }
