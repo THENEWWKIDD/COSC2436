@@ -23,5 +23,5 @@ int factorial(int num)
 
 int main(int argc, char* argv[])
 {
-
+    std::cout << factorial(10) << std::endl;
 }

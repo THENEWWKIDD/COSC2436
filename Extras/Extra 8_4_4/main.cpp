@@ -16,5 +16,5 @@ int mult(int a, int b)
 
 int main(int argc, char* argv[])
 {
-
+   std::cout << mult(5, 5) << std::endl;
 }

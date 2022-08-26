@@ -25,5 +25,5 @@ void nb(int n, int d )
 
 int main(int argc, char* argv[])
 {
-
+    nb(472, 100);
 }
