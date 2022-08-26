@@ -43,7 +43,7 @@ int mult(int a, int b)
         sum = a + mult(a, b - 1);
     }
 
-    return;
+    return sum;
 }
 
 void nb(int n, int d )
@@ -73,4 +73,6 @@ int main(int argc, char* argv[])
     p(4);
 
     nb(472, 100);
+
+    mult(45, 10);
 }
