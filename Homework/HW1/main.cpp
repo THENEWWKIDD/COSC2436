@@ -5,16 +5,28 @@
 #include <string>
 #include <vector>
 
-std::vector<string> deleteSpaces(std::vector<string> input) //function that recusively deletes the spaces in a vector
+std::vector<string> deleteSpaces(std::vector<string> inputVector, int index) //function that recusively deletes the spaces in a vector
 {
+    //Loop through the each element (string) of inputVector
     int i = 0;
-    while(i < input.size())
+    std::vector<char> discardVector;
+    string selectedStr = inputVector[index];
+    while (i < selectedStr.size())
     {
-        input[i].erase(std::remove(input[i].begin(), input[i].end(), ' '), input[i].end());
-        i++;
-    }
+        if(selectedStr[i] == ' ' || selectedStr[i] == '\n')
+        {
+            discardVector.push_back(selectedStr[i]);
+            i++;
+        }
 
-    return input;
+        else
+        {
+            
+            i++;
+        }
+        
+    }
+    
 }
 
 void assignValues(std::vector<string> in_Values) //uses the vector to find letters and assign their number value to their ID placeholder(s)
@@ -40,7 +52,7 @@ void assignValues(std::vector<string> in_Values) //uses the vector to find lette
 
 int main(int argc, char* argv[])
 {
-    std::vector<string> condensedInput;
+    std::vector<string> regularInput;
     string temp;
     ifstream inPut("input2.txt");
     ofstream outPut("myAns.txt");
@@ -48,15 +60,15 @@ int main(int argc, char* argv[])
     while (!inPut.eof())
     {
         getline(inPut, temp);
-        condensedInput.push_back(temp);
+        regularInput.push_back(temp);
         temp = "";
     }
 
-    deleteSpaces(condensedInput);
+    deleteSpaces(regularInput, 0);
 
-    for(int i = 0; i < condensedInput.size(); i++)
+    for(int i = 0; i < regularInput.size(); i++)
     {
-        std::cout << condensedInput[i] << std::endl;
+        std::cout << regularInput[i] << std::endl;
     }
 
     //
