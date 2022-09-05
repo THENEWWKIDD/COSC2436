@@ -1,26 +1,18 @@
-//Write a recursive function that adds from int n to 1
+//Write a recursive function that adds from m to n
 
 #include <iostream>
 
-int add(int n)
+int add(int m, int n)
 {
-    int sum;
-    if(n == 1 || n == 0)
+    if(m == n)
     {
-        sum = n;
-        return sum;
+        return m;
     }
 
-    else if(n > 1)
-    {
-        sum = sum + n;
-        add(n-1);
-    }
-
-    return sum;
+    return n + add(m, n - 1);
 }
 
 int main()
 {
-    std::cout <<add(14) << std::endl;
+    std::cout << add(0, 18) << std::endl;
 }
