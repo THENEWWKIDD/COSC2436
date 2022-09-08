@@ -72,14 +72,12 @@ void assignValues(std::vector<string> &in_Values, int index) //uses the vector t
 
         else if(isdigit(genVector[i]))
         {
-            numVector.push_back(genVector[i]);
-            
+            number << genVector[i];
             // while (isdigit(genVector[i]))
             // {
-                
+            //     number << genVector[i];
             //     i++;
             // }
-            // number << genVector[i];
         }
 
         letter >> letterCpy;
