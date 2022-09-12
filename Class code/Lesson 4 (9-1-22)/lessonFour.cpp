@@ -11,7 +11,7 @@ struct pearl
 {
     std::string color;
     pearl* hole;
-}
+};
 
 class necklace
 {
@@ -24,7 +24,7 @@ class necklace
         head = nullptr;
     }
 
-    void addpearl(string c);
+    void addpearl(std::string c);
     void print();
 };
 

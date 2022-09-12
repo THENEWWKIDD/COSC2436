@@ -4,7 +4,7 @@
 
     bool Dealership::isEmpty(Car* node)
     {
-
+        
     }
     
     void Dealership::addAtBeg(int year, std::string name, double price, std::string color)
