@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "/home/bigtasty/COSC2436/ArgumentManager.h"
 
@@ -13,11 +14,12 @@ struct element
 class linkedList
 {
     private:
-    element* head;
-    element* tail;
+    element* head = nullptr;
+    element* tail = nullptr;
 
     public:
     bool isEmpty();
+    void printLL();
     void addAtBeg(string data);
     void addAtEnd(string data);
     void removeHead();
@@ -32,6 +34,28 @@ bool linkedList::isEmpty()
     }
 
     return false;
+}
+
+void linkedList::printLL()
+{
+    int i = 0;
+    element* cu = head;
+
+    if(head == nullptr)
+    {
+        std::cout << "This list is empty." << std::endl;
+    }
+
+    else
+    {
+        while(cu -> next != nullptr)
+        {
+            std::cout << cu -> value_S << std::endl;
+            cu = cu -> next;
+        }
+
+        std::cout << cu -> value_S << std::endl;
+    }
 }
 
 void linkedList::addAtBeg(string data)
@@ -107,18 +131,45 @@ void linkedList::removeTail()
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::vector<string> arr = {"String of stuff"};//, "More stuff in the thing", "I am in danger", "This is being printed right now", "This is a senctence", "Hello there"};
-
     linkedList listOfElements;
 
-    int i = 0;
-    while(i < arr.size())
+    std::vector<string> regularInput;
+    string temp;
+    ifstream inPut("input2.txt");
+    ofstream outPut("myAns.txt");
+
+    while (!inPut.eof())
     {
-        addAtBeg[arr[i]];
-        i++;
+        getline(inPut, temp);
+        regularInput.push_back(temp);
+        temp = "";
     }
 
-    
+    for(int i = 0; i < regularInput.size(); i++)
+    {
+        if(regularInput[i] != "remove tail" || regularInput[i] != "remove head")
+        {
+            listOfElements.addAtEnd(regularInput[i]);
+        }
+
+        else if(regularInput[i] == "remove tail")
+        {
+            listOfElements.removeTail();
+        }
+
+        else if(regularInput[i] == "remove head")
+        {
+            listOfElements.removeHead();
+        }
+
+
+        
+    }
+
+
+
+    //listOfElements.removeHead();
+    //listOfElements.printLL();
 }
