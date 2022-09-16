@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <vector>
+#include <string>
 #include "/home/bigtasty/COSC2436/ArgumentManager.h"
 
 struct element
@@ -9,6 +11,7 @@ struct element
 
     string value_S;
     int value_I;
+    char value_C;
 };
 
 class linkedList
@@ -50,7 +53,7 @@ void linkedList::printLL()
     {
         while(cu -> next != nullptr)
         {
-            std::cout << cu -> value_S << std::endl;
+            std::cout << cu -> value_S << " ";
             cu = cu -> next;
         }
 
@@ -65,9 +68,8 @@ void linkedList::addAtBeg(string data)
 
     if(isEmpty())
     {
-        temp = new element;
-        temp -> value_S = data;
         head = temp;
+        tail = temp;
     }
 
     else
@@ -115,20 +117,30 @@ void linkedList::removeHead()
 void linkedList::removeTail()
 {
     element* cu = head;
+    element* prev = nullptr;
     if(isEmpty())
     {
         return;
     }
 
-    while(cu -> next != nullptr)
+    else if(cu->next == nullptr)
     {
-        if(cu -> next = tail)
-        {
-            tail = cu;
-            cu = cu -> next;
-            delete cu;
-        }
+        head = nullptr;
     }
+
+    else
+    {
+        while(cu -> next != nullptr)
+        {
+            prev = cu;
+            tail = prev;
+            cu = cu -> next;
+        }
+        
+        delete cu;
+    }
+
+    
 }
 
 int main(int argc, char* argv[])
@@ -136,37 +148,54 @@ int main(int argc, char* argv[])
     linkedList listOfElements;
 
     std::vector<string> regularInput;
+    std::stringstream testSS;
     string temp;
-    ifstream inPut("input2.txt");
+    string type;
+    string addLoc;
+    ifstream inPut("input1.txt");
     ofstream outPut("myAns.txt");
 
+    getline(inPut, type);
+    getline(inPut, addLoc);
+    
     while (!inPut.eof())
     {
         getline(inPut, temp);
+
+        temp.erase(remove(temp.begin(), temp.end(), '\n'), temp.end());
+        temp.erase(remove(temp.begin(), temp.end(), '\r'), temp.end());
+        temp.erase(remove(temp.begin(), temp.end(), ' '), temp.end());
         regularInput.push_back(temp);
+
         temp = "";
     }
 
     for(int i = 0; i < regularInput.size(); i++)
     {
-        if(regularInput[i] != "remove tail" || regularInput[i] != "remove head")
-        {
-            listOfElements.addAtEnd(regularInput[i]);
-        }
-
-        else if(regularInput[i] == "remove tail")
+        string test = regularInput[i];
+        
+        if(test.find("removetail") != string::npos)
         {
             listOfElements.removeTail();
         }
 
-        else if(regularInput[i] == "remove head")
+        else if(test.find("removehead") != string::npos)
         {
             listOfElements.removeHead();
         }
 
+        else if(test != "" && addLoc == "head\r")
+        {
+            listOfElements.addAtBeg(test);
+        }
 
-        
+        else if(test != "" && addLoc == "tail\r" )
+        {
+            listOfElements.addAtEnd(test);
+        }
     }
+
+    listOfElements.printLL();
 
 
 
