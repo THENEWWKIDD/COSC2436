@@ -1,6 +1,6 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
-#include <algorithm>
 #include <vector>
 #include <string>
 #include "/home/bigtasty/COSC2436/ArgumentManager.h"
@@ -22,7 +22,7 @@ class linkedList
 
     public:
     bool isEmpty();
-    void printLL();
+    void printLL(std::vector<string> &in);
     void addAtBeg(string data);
     void addAtEnd(string data);
     void removeHead();
@@ -39,7 +39,7 @@ bool linkedList::isEmpty()
     return false;
 }
 
-void linkedList::printLL()
+void linkedList::printLL(std::vector<string> &in)
 {
     int i = 0;
     element* cu = head;
@@ -54,10 +54,12 @@ void linkedList::printLL()
         while(cu -> next != nullptr)
         {
             std::cout << cu -> value_S << " ";
+            in.push_back(cu -> value_S);
             cu = cu -> next;
         }
 
         std::cout << cu -> value_S << std::endl;
+        in.push_back(cu -> value_S);
     }
 }
 
@@ -133,10 +135,10 @@ void linkedList::removeTail()
         while(cu -> next != nullptr)
         {
             prev = cu;
-            prev -> next = nullptr;
             cu = cu -> next;
         }
-
+        
+        prev -> next = nullptr;
         tail = prev;
         delete cu;
     }
@@ -146,15 +148,24 @@ void linkedList::removeTail()
 
 int main(int argc, char* argv[])
 {
+    ArgumentManager am(argc, argv);
+
+    string input = am.get("input");
+    string output = am.get("output");
+
+    ifstream inPut(input);
+    ofstream outPut(output);
+
     linkedList listOfElements;
 
     std::vector<string> regularInput;
-    std::stringstream testSS;
+    std::vector<string> testSS;
+    stringstream out_put;
     string temp;
     string type;
     string addLoc;
-    ifstream inPut("input1.txt");
-    ofstream outPut("myAns.txt");
+
+    
 
     getline(inPut, type);
     getline(inPut, addLoc);
@@ -196,10 +207,11 @@ int main(int argc, char* argv[])
         }
     }
 
-    listOfElements.printLL();
+    listOfElements.printLL(testSS);
 
+    for(int i = 0; i < testSS.size(); i++)
+    {
+        outPut << testSS[i] << " ";
+    }
 
-
-    //listOfElements.removeHead();
-    //listOfElements.printLL();
 }
