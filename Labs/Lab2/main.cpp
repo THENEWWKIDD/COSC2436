@@ -133,7 +133,7 @@ void linkedList::removeTail()
         while(cu -> next != nullptr)
         {
             prev = cu;
-
+            prev -> next = nullptr;
             cu = cu -> next;
         }
 
