@@ -10,7 +10,7 @@ struct Node
 
     string id;
     string score;
-    char grade;
+    string grade;
     string username;
 };
 
@@ -27,7 +27,7 @@ class linkedList
     bool isEmpty();
     void addAtEnd(Node* temp);
     void add(int pos, Node* temp);
-    void extractAndPopulate(std::vector<string> input, Node* p);
+    void extractAndPopulate(std::string input, Node* p);
 
     void printLL();
 };
@@ -72,6 +72,54 @@ void linkedList::printLL()
     }
 }
 
+void linkedList::extractAndPopulate(std::string in_Str, Node* p) //Extracting id, username, score, and grade
+{
+    std::string findAndDelete = in_Str;
+    std::string data;
+
+    if(findAndDelete.substr(0, findAndDelete.find(':')) == "[id")
+    {
+        findAndDelete.erase(0, findAndDelete.find(':') + 1);
+        data = findAndDelete.substr(0, findAndDelete.find(';'));
+        p -> id = data;
+        findAndDelete.erase(0, findAndDelete.find(';') + 1);
+        data = "";
+    }
+
+    if(findAndDelete.substr(0, findAndDelete.find(':')) == "username")
+    {
+        findAndDelete.erase(0, findAndDelete.find(':') + 1);
+        data = findAndDelete.substr(0, findAndDelete.find(';'));
+        p -> username = data;
+        findAndDelete.erase(0, findAndDelete.find(';') + 1);
+        data = "";
+    }
+
+    if(findAndDelete.substr(0, findAndDelete.find(':')) == "score")
+    {
+        findAndDelete.erase(0, findAndDelete.find(':') + 1);
+        data = findAndDelete.substr(0, findAndDelete.find(';'));
+        p -> score = data;
+        findAndDelete.erase(0, findAndDelete.find(';') + 1);
+        data = "";
+    }
+
+    if(findAndDelete.substr(0, findAndDelete.find(':')) == "grade")
+    {
+        findAndDelete.erase(0, findAndDelete.find(':') + 1);
+        data = findAndDelete.substr(0, findAndDelete.find(']'));
+        p -> grade = data;
+        findAndDelete.erase(0, findAndDelete.find(']') + 1);
+        data = "";
+    }
+    
+    if(isEmpty())
+    {
+        head = p;
+        //tail = p;
+    }
+}
+
 void linkedList::addAtEnd(Node* temp)
 {
     //temp -> value_S = data;
@@ -107,46 +155,6 @@ void linkedList::add(int pos, Node* temp)
     }
 }
 
-void linkedList::extractAndPopulate(std::vector<string> in_Vec, Node* p) //Extracting id, username, score, and grade
-{
-    for (int i = 0; i < in_Vec.size(); i++)
-    {
-        std::string findAndDelete = in_Vec[i];
-        std::string data;
-
-        if(findAndDelete.substr(0, findAndDelete.find(':')) == "[id")
-        {
-            findAndDelete.erase(0, findAndDelete.find(':') + 1);
-            data = findAndDelete.substr(0, findAndDelete.find(';'));
-            findAndDelete.erase(0, findAndDelete.find(';') + 1);
-            data = "";
-        }
-
-        if(findAndDelete.substr(0, findAndDelete.find(':')) == "username")
-        {
-            findAndDelete.erase(0, findAndDelete.find(':') + 1);
-            data = findAndDelete.substr(0, findAndDelete.find(';'));
-            findAndDelete.erase(0, findAndDelete.find(';') + 1);
-            data = "";
-        }
-
-        if(findAndDelete.substr(0, findAndDelete.find(':')) == "score")
-        {
-            findAndDelete.erase(0, findAndDelete.find(':') + 1);
-            data = findAndDelete.substr(0, findAndDelete.find(';'));
-            findAndDelete.erase(0, findAndDelete.find(';') + 1);
-            data = "";
-        }
-
-        if(findAndDelete.substr(0, findAndDelete.find(':')) == "grade")
-        {
-            findAndDelete.erase(0, findAndDelete.find(':') + 1);
-            data = findAndDelete.substr(0, findAndDelete.find(']'));
-            findAndDelete.erase(0, findAndDelete.find(']') + 1);
-            data = "";
-        }
-    }
-}
 
 int main(int argc, char* argv[])
 {
@@ -162,9 +170,10 @@ int main(int argc, char* argv[])
     ifstream comm("command1.txt");
     ofstream outPut("output1.txt");
 
-    Node* cu;
-    string temp;
-    std::vector<string> arr; //= {[id:1234;username:john;score:100;grade:A]};
+    Node* student = new Node;
+    int i = 0;
+    std::string temp;
+    std::vector<string> arr; // = {[id:1234;username:john;score:100;grade:A]};
 
     while(!inPut.eof())
     {
@@ -176,8 +185,10 @@ int main(int argc, char* argv[])
         temp = "";
     }
 
-        list.extractAndPopulate(arr);
-    
+    list.extractAndPopulate(arr[0], student);
+    list.extractAndPopulate(arr[1], student -> next);
+    list.extractAndPopulate(arr[2], student -> next -> next);
+    list.extractAndPopulate(arr[3], student -> next -> next -> next);
 
-    
+    list.printLL();
 }

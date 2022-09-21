@@ -161,9 +161,10 @@ int main(int argc, char* argv[])
     std::vector<string> regularInput;
     std::vector<string> testSS;
     stringstream out_put;
+    string addLoc;
     string temp;
     string type;
-    string addLoc;
+
 
     
 
