@@ -6,7 +6,7 @@
 
 struct Node
 {
-    Node* next;
+    Node* next = nullptr;
 
     string id;
     string score;
@@ -23,8 +23,10 @@ class linkedList
     public:
     void sort(std::string type);
     void remove(std::string cred, int &size);
+    
     bool isEmpty();
     void printLL();
+    void removeHead();
     void duplicateDel();
     void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
     void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
@@ -222,8 +224,61 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
     
 }
 
-void remove(std::string cred, int &size)
+void linkedList::removeHead()
 {
+    Node* cu;
+
+    if(isEmpty())
+    {
+        return;
+    }
+
+    else
+    {
+        cu = head;
+        head = head -> next;
+        delete cu;
+    }
+}
+
+void linkedList::remove(std::string cred, int &size)
+{
+    Node* cu = head;
+    Node* prev = nullptr;
+
+    if(isEmpty())
+    {
+        return;
+    }
+
+    else if(head -> id == cred || head -> username == cred || head -> score == cred ||head -> grade == cred)
+    {
+        removeHead();
+        size--;
+    }
+
+    else
+    {
+        while(cu != nullptr && (cu -> id != cred || cu -> username != cred || cu -> score != cred || cu -> grade != cred))
+        {
+            prev = cu;
+            cu = cu -> next;
+        }
+
+        if(cu != nullptr)
+        {
+            prev -> next = cu -> next;
+            delete cu;
+            size--;
+        }
+
+        else
+        {
+            delete cu;
+            return;
+        }
+    }
+
 
 }
 
@@ -269,25 +324,54 @@ int main(int argc, char* argv[])
 
     for(int i = 0; i < arr.size(); i++)
     {
-        if(arr[i].find("Add"))
+        std::string TBP = arr[i]; //To be parsed
+
+        if(TBP.find("Add"))
         {
             //Parse data into credentials
             //list.add();
         }
 
-        else if(arr[i].find("Remove") != string::npos)
+        else if(TBP.find("Remove") != string::npos)
         {
-            //list.remove();
+            std::string data = TBP.substr(0, TBP.find(":"));
+            std::string targetData;
+            
+            if(data.find("id") != string::npos)
+            {
+                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
+                remove(targetData, sizeOfList);
+            }
+
+            else if(data.find("username") != string::npos)
+            {
+                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
+                remove(targetData, sizeOfList);
+            }
+
+            else if(data.find("score") != string::npos)
+            {
+                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
+                remove(targetData, sizeOfList);
+            }
+
+            else if(data.find("grade") != string::npos)
+            {
+                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
+                remove(targetData, sizeOfList);
+            }
+
+
         }
         
-        else if(arr[i].find("Sort") != string::npos)
+        else if(TBP.find("Sort") != string::npos)
         {
             //list.sort();
         }
 
         else
         {
-            list.extractAndPopulate(arr[i], sizeOfList);
+            list.extractAndPopulate(TBP, sizeOfList);
         }
     }
 
