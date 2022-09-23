@@ -21,13 +21,14 @@ class linkedList
     Node* tail = nullptr;
 
     public:
-    void remove();
+    void sort(std::string type);
+    void remove(std::string cred, int &size);
     bool isEmpty();
     void printLL();
     void duplicateDel();
-    void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD);
-    void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD);
-    void extractAndPopulate(std::string input);
+    void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
+    void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
+    void extractAndPopulate(std::string input, int &size);
 };
 
 bool linkedList::isEmpty()
@@ -70,9 +71,8 @@ void linkedList::printLL()
     }
 }
 
-void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD)
+void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size)
 {
-    int count;
     //temp -> value_S = data;
     Node* temp = new Node;
     temp -> id = ID;
@@ -91,6 +91,7 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
         {
             head = temp;
             tail = temp;
+            size++;
         }
     }
 
@@ -103,11 +104,12 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
     {
         tail -> next = temp;
         tail = temp;
+        size++;
     }
-    count + 1;
+    
 }
 
-void linkedList::extractAndPopulate(std::string in_Str) //Extracting id, username, score, and grade
+void linkedList::extractAndPopulate(std::string in_Str, int &size) //Extracting id, username, score, and grade
 {
     std::string findAndDelete = in_Str;
     std::string data;
@@ -152,10 +154,10 @@ void linkedList::extractAndPopulate(std::string in_Str) //Extracting id, usernam
         data = "";
     }
     
-    addAtEnd(id, user, score, grade);
+    addAtEnd(id, user, score, grade, size);
 }
 
-void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD)
+void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size)
 {
     Node* temp = new Node;
     temp -> id = ID;
@@ -163,11 +165,33 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
     temp -> score = SCR;
     temp -> grade = GRD;
 
-    if(isEmpty())
+    if(isEmpty() && pos != 0)
     {
         return;
         // head = temp;
         // tail = temp;
+    }
+
+    else if(isEmpty() && pos == 0)
+    {
+        addAtEnd(ID, USR, SCR, GRD, size);
+
+        // if(temp -> id == "" || temp -> username == "" || temp -> score == "" || temp -> grade == "")
+        // {
+        //     return;
+        // }
+
+        // else
+        // {
+        //     head = temp;
+        //     tail = temp;
+        //     size++;
+        // }
+    }
+
+    else if(pos > size)
+    {
+        return;
     }
 
     else if(temp -> id == "" || temp -> username == "" || temp -> score == "" || temp -> grade == "")
@@ -193,7 +217,14 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
 
     prev -> next = temp;
 
+    size++;
+
     
+}
+
+void remove(std::string cred, int &size)
+{
+
 }
 
 int main(int argc, char* argv[])
@@ -213,7 +244,8 @@ int main(int argc, char* argv[])
     Node* student = new Node;
     int i = 0;
     std::string temp;
-    std::vector<string> arr; // = {[id:1234;username:john;score:100;grade:A]};
+    std::vector<string> arr;
+    int sizeOfList = 0;
 
     while(!inPut.eof())
     {
@@ -225,12 +257,39 @@ int main(int argc, char* argv[])
         temp = "";
     }
 
-    list.extractAndPopulate(arr[0]);
-    list.extractAndPopulate(arr[1]);
-    list.extractAndPopulate(arr[2]);
-    list.extractAndPopulate(arr[3]);
-    list.extractAndPopulate(arr[4]);
+    while(!comm.eof())
+    {
+        getline(comm, temp);
+        temp.erase(remove(temp.begin(), temp.end(), '\n'), temp.end());
+        temp.erase(remove(temp.begin(), temp.end(), '\r'), temp.end());
+        temp.erase(remove(temp.begin(), temp.end(), ' '), temp.end());
+        arr.push_back(temp);
+        temp = "";
+    }
 
+    for(int i = 0; i < arr.size(); i++)
+    {
+        if(arr[i].find("Add"))
+        {
+            //Parse data into credentials
+            //list.add();
+        }
+
+        else if(arr[i].find("Remove") != string::npos)
+        {
+            //list.remove();
+        }
+        
+        else if(arr[i].find("Sort") != string::npos)
+        {
+            //list.sort();
+        }
+
+        else
+        {
+            list.extractAndPopulate(arr[i], sizeOfList);
+        }
+    }
 
     list.printLL();
 
