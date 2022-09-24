@@ -27,11 +27,15 @@ class linkedList
     Node* getHead();
     void removeHead();
     void duplicateDel();
+    void deleteD(Node* h, Node* p);
+    void extractAndPopulate(std::string input, int &size);
     void insertionSort(Node* p, std::string data); //Function was modified from a G4G solution
     void sortedInsert(Node* p, std::string data); //Function was modified from a G4G solution
+
     void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
+    void addAtBeg(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
     void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
-    void extractAndPopulate(std::string input, int &size);
+    
 
     private:
 
@@ -80,6 +84,29 @@ void linkedList::printLL()
     }
 }
 
+void linkedList::addAtBeg(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size)
+{
+    Node* temp = new Node;
+    temp -> id = ID;
+    temp -> username = USR;
+    temp -> score = SCR;
+    temp -> grade = GRD;
+
+    if(isEmpty())
+    {
+        head = temp;
+        tail = temp;
+        size++;
+    }
+
+    else
+    {
+        temp -> next = head;
+        head = temp;
+        size++;
+    }
+}
+
 void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size)
 {
     //temp -> value_S = data;
@@ -115,7 +142,6 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
         tail = temp;
         size++;
     }
-    
 }
 
 void linkedList::extractAndPopulate(std::string in_Str, int &size) //Extracting id, username, score, and grade
@@ -209,26 +235,49 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
     }
 
     Node* cu = head;
-    Node*  prev = nullptr;
+    Node* prev = nullptr;
     int position = 0;
 
     while (cu != nullptr)
     {
-        if(pos == position)
+        if(cu -> username == temp -> username && cu -> id != temp -> id)
         {
             return;
         }
 
-        prev = cu;
-        cu = cu -> next;
-        position;
+        else if(cu -> id == temp -> id)
+        {
+            cu -> id = temp -> id;
+            cu -> username = temp -> username;
+            cu -> score = temp -> score;
+            cu -> grade = temp -> grade;
+            return;
+        }
+
+        else
+        {
+            if(pos == 0)
+            {
+                addAtBeg(ID, USR, SCR, GRD, size);
+                break;
+            }
+
+            else if(pos == position)
+            {
+                temp -> next = cu;
+                prev -> next = temp;
+                cu = cu -> next;
+                break;
+            }
+
+            else
+            {
+                prev = cu;
+                cu = cu -> next;
+                position++;
+            }
+        }
     }
-
-    prev -> next = temp;
-
-    size++;
-
-    
 }
 
 void linkedList::removeHead()
@@ -405,6 +454,29 @@ Node* linkedList::getHead()
     return head;
 }
 
+void linkedList::deleteD(Node* h, Node* p)
+{
+    Node* cu = h;
+
+    while(cu -> next != nullptr)
+    {
+        if(p -> id == cu -> id)
+        {
+            cu -> id = p -> id;
+            cu -> username = p -> username;
+            cu -> score = p -> score;
+            cu -> grade = p -> grade;
+        }
+
+        else if(p -> username == cu -> username)
+        {
+            return
+        }
+
+        cu = cu -> next;
+    }
+}
+
 int main(int argc, char* argv[])
 {
     linkedList list;
@@ -448,12 +520,73 @@ int main(int argc, char* argv[])
     for(int i = 0; i < arr.size(); i++)
     {
         std::string TBP = arr[i]; //To be parsed
+        std::stringstream numVal;
 
         if(TBP.find("Add") != string::npos)
         {
+            int position;
+            std::string inputStr;
+
             //Parse data into credentials
-            //list.add();
-            std::cout << "Needs to be added" << endl;
+            numVal << TBP.substr(TBP.find("(") + 1, (TBP.find(")") - TBP.find("(") - 1));
+            numVal >> position;
+
+            inputStr = TBP.substr(TBP.find("["), (TBP.find("]") - TBP.find("[") + 1));
+
+            std::string findAndDelete = inputStr;
+            std::string data;
+            std::string id;
+            std::string user;
+            std::string score;
+            std::string grade;
+
+            if(findAndDelete.substr(0, findAndDelete.find(':')) == "[id")
+            {
+                findAndDelete.erase(0, findAndDelete.find(':') + 1);
+                data = findAndDelete.substr(0, findAndDelete.find(';'));
+                id = data;
+                findAndDelete.erase(0, findAndDelete.find(';') + 1);
+                data = "";
+            }
+
+            if(findAndDelete.substr(0, findAndDelete.find(':')) == "username")
+            {
+                findAndDelete.erase(0, findAndDelete.find(':') + 1);
+                data = findAndDelete.substr(0, findAndDelete.find(';'));
+                user = data;
+                findAndDelete.erase(0, findAndDelete.find(';') + 1);
+                data = "";
+            }
+
+            if(findAndDelete.substr(0, findAndDelete.find(':')) == "score")
+            {
+                findAndDelete.erase(0, findAndDelete.find(':') + 1);
+                data = findAndDelete.substr(0, findAndDelete.find(';'));
+                score = data;
+                findAndDelete.erase(0, findAndDelete.find(';') + 1);
+                data = "";
+            }
+
+            if(findAndDelete.substr(0, findAndDelete.find(':')) == "grade")
+            {
+                findAndDelete.erase(0, findAndDelete.find(':') + 1);
+                data = findAndDelete.substr(0, findAndDelete.find(']'));
+                grade = data;
+                findAndDelete.erase(0, findAndDelete.find(']') + 1);
+                data = "";
+            }
+
+            if(id == "" || user == "" || score == "" || grade == "")
+            {
+                break;
+            }
+
+            else
+            {
+                list.add(position, id, user, score, grade, sizeOfList);
+            }
+            
+            //std::cout << "Needs to be added" << endl;
         }
 
         else if(TBP.find("Remove") != string::npos)
