@@ -19,6 +19,7 @@ class linkedList
     private:
     Node* head = nullptr;
     Node* tail = nullptr;
+    Node* sorted = nullptr;
 
     public:
     void sort(std::string type);
@@ -28,9 +29,16 @@ class linkedList
     void printLL();
     void removeHead();
     void duplicateDel();
+    void insertionSort(Node* p, std::string data);
+    void sortedInsert(Node* p, std::string data);
     void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
     void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
     void extractAndPopulate(std::string input, int &size);
+
+    Node* getHead()
+    {
+        return head;
+    }
 };
 
 bool linkedList::isEmpty()
@@ -259,10 +267,19 @@ void linkedList::remove(std::string cred, int &size)
 
     else
     {
-        while(cu != nullptr && (cu -> id != cred || cu -> username != cred || cu -> score != cred || cu -> grade != cred))
+        while(cu != nullptr)
         {
-            prev = cu;
-            cu = cu -> next;
+            if((cu -> id == cred || cu -> username == cred || cu -> score == cred || cu -> grade == cred))
+            {
+                break;
+            }
+
+            else
+            {
+                prev = cu;
+                cu = cu -> next;
+            }
+            
         }
 
         if(cu != nullptr)
@@ -281,6 +298,112 @@ void linkedList::remove(std::string cred, int &size)
 
 
 }
+
+void linkedList::sortedInsert(Node* newnode, std::string data)
+    {
+        if(data == "id")
+        {
+            if (sorted == NULL || sorted->id >= newnode -> id) 
+            {
+                newnode -> next = sorted;
+                sorted = newnode;
+            }
+            else 
+            {
+                Node* current = sorted;
+                /* Locate the node before the point of insertion
+                */
+                while (current->next != NULL && current->next->id < newnode->id)
+                {
+                    current = current->next;
+                }
+
+                newnode->next = current->next;
+                current->next = newnode;
+            }
+        }
+
+        if(data == "username")
+        {
+            if (sorted == NULL || sorted->username >= newnode->username) 
+            {
+                newnode->next = sorted;
+                sorted = newnode;
+            }
+            else 
+            {
+                Node* current = sorted;
+                /* Locate the node before the point of insertion
+                */
+                while (current->next != NULL && current->next->username < newnode->username)
+                {
+                    current = current->next;
+                }
+
+                newnode->next = current->next;
+                current->next = newnode;
+            }
+        }
+
+        if(data == "score")
+        {
+            if (sorted == NULL || sorted->score >= newnode->score) 
+            {
+                newnode->next = sorted;
+                sorted = newnode;
+            }
+            else 
+            {
+                Node* current = sorted;
+                /* Locate the node before the point of insertion
+                */
+                while (current->next != NULL && current->next->score < newnode->score)
+                {
+                    current = current->next;
+                }
+
+                newnode->next = current->next;
+                current->next = newnode;
+            }
+        }
+
+        if(data == "grade")
+        {
+            if (sorted == NULL || sorted->grade >= newnode->grade) 
+            {
+                newnode->next = sorted;
+                sorted = newnode;
+            }
+            else 
+            {
+                Node* current = sorted;
+                /* Locate the node before the point of insertion
+                */
+                while (current->next != NULL && current->next->grade < newnode->grade)
+                {
+                    current = current->next;
+                }
+
+                newnode->next = current->next;
+                current->next = newnode;
+            }
+        }
+    }
+
+void linkedList::insertionSort(Node* headref, std::string data)
+    {
+        sorted = NULL;
+        Node* current = headref;
+        while (current != NULL) 
+        {
+            Node* next = current->next;
+            sortedInsert(current, data);
+            current = next;
+        }
+        head = sorted;
+    }
+  
+  
 
 int main(int argc, char* argv[])
 {
@@ -326,10 +449,11 @@ int main(int argc, char* argv[])
     {
         std::string TBP = arr[i]; //To be parsed
 
-        if(TBP.find("Add"))
+        if(TBP.find("Add") != string::npos)
         {
             //Parse data into credentials
             //list.add();
+            std::cout << "Needs to be added" << endl;
         }
 
         else if(TBP.find("Remove") != string::npos)
@@ -339,34 +463,36 @@ int main(int argc, char* argv[])
             
             if(data.find("id") != string::npos)
             {
-                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
-                remove(targetData, sizeOfList);
+                targetData = TBP.substr(TBP.find(":") + 1, (TBP.find(":") - TBP.find(")")) - 1);
+                list.remove(targetData, sizeOfList);
             }
 
             else if(data.find("username") != string::npos)
             {
-                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
-                remove(targetData, sizeOfList);
+                targetData = TBP.substr(TBP.find(":") + 1, (TBP.find(")") - TBP.find(":")) - 1);
+                list.remove(targetData, sizeOfList);
             }
 
             else if(data.find("score") != string::npos)
             {
-                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
-                remove(targetData, sizeOfList);
+                targetData = TBP.substr(TBP.find(":") + 1, (TBP.find(":") - TBP.find(")")) - 1);
+                list.remove(targetData, sizeOfList);
             }
 
             else if(data.find("grade") != string::npos)
             {
-                targetData = TBP.subtr(TBP.find(":"), TBP.find(")"))
-                remove(targetData, sizeOfList);
+                targetData = TBP.substr(TBP.find(":") + 1, (TBP.find(":") - TBP.find(")")) - 1);
+                list.remove(targetData, sizeOfList);
             }
-
-
         }
         
         else if(TBP.find("Sort") != string::npos)
         {
-            //list.sort();
+
+            std::string targetData = TBP.substr(TBP.find("("), (TBP.find("(") - TBP.find(")")) - 1);
+            list.insertionSort(list.getHead(), TBP);
+            
+            //std::cout << "Needs to be sorted" << endl;
         }
 
         else
@@ -374,9 +500,5 @@ int main(int argc, char* argv[])
             list.extractAndPopulate(TBP, sizeOfList);
         }
     }
-
     list.printLL();
-
-
-    
 }
