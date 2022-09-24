@@ -19,6 +19,15 @@ public:
     Node* head;
     Node* sorted;
   
+    void push(int val)
+    {
+        /* allocate node */
+        Node* newnode = new Node(val);
+        /* link the old list off the new node */
+        newnode->next = head;
+        /* move the head to point to the new node */
+        head = newnode;
+    }
   
     // function to sort a singly linked list using insertion
     // sort
@@ -51,7 +60,7 @@ public:
     void sortedInsert(Node* newnode)
     {
         /* Special case for the head end */
-        if (sorted == NULL || sorted->val >= newnode->val) 
+        if (sorted == NULL || sorted->val < newnode->val) 
         {
             newnode->next = sorted;
             sorted = newnode;
@@ -61,7 +70,7 @@ public:
             Node* current = sorted;
             /* Locate the node before the point of insertion
              */
-            while (current->next != NULL && current->next->val < newnode->val)
+            while (current->next != NULL && current->next->val >= newnode->val)
             {
                 current = current->next;
             }
@@ -84,6 +93,12 @@ public:
 int main()
 {
     LinkedlistIS list;
+    list.head = NULL;
+    list.push(5);
+    list.push(20);
+    list.push(4);
+    list.push(3);
+    list.push(30);
     cout << "Linked List before sorting" << endl;
     list.printlist(list.head);
     cout << endl;
