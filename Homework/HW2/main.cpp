@@ -27,6 +27,7 @@ class linkedList
     Node* getHead();
     void removeHead();
     void duplicateDel();
+    void cpy(std::vector<string> &in);
     void deleteD(Node* h, Node* p);
     void extractAndPopulate(std::string input, int &size);
     void insertionSort(Node* p, std::string data); //Function was modified from a G4G solution
@@ -84,6 +85,43 @@ void linkedList::printLL()
     }
 }
 
+void linkedList::cpy(std::vector<string> &in)
+{
+    Node* cu = head;
+
+    if(head == nullptr)
+    {
+        std::cout << "This list is empty." << std::endl;
+    }
+
+    else
+    {
+        while(cu -> next != nullptr)
+        {
+            in.push_back("[");
+            in.push_back(cu -> id);
+            in.push_back(";");
+            in.push_back(cu -> username);
+            in.push_back(";");
+            in.push_back(cu -> score );
+            in.push_back(";");
+            in.push_back(cu -> grade);
+            in.push_back("]");
+            cu = cu -> next;
+        }
+
+        in.push_back("[");
+        in.push_back(cu -> id);
+        in.push_back(";");
+        in.push_back(cu -> username);
+        in.push_back(";");
+        in.push_back(cu -> score);
+        in.push_back(";");
+        in.push_back(cu -> grade);
+        in.push_back("]");
+    }
+}
+
 void linkedList::addAtBeg(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size)
 {
     Node* temp = new Node;
@@ -111,6 +149,7 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
 {
     //temp -> value_S = data;
     Node* temp = new Node;
+    Node* cu = head;
     temp -> id = ID;
     temp -> username = USR;
     temp -> score = SCR;
@@ -128,6 +167,7 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
             head = temp;
             tail = temp;
             size++;
+            return;
         }
     }
 
@@ -136,12 +176,28 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
         return;
     }
 
-    else
+    while(cu -> next != nullptr)
     {
-        tail -> next = temp;
-        tail = temp;
-        size++;
+        if(cu -> username == temp -> username && cu -> id != temp -> id)
+        {
+            return;
+        }
+
+        else if(cu -> id == temp -> id)
+        {
+            cu -> id = temp -> id;
+            cu -> username = temp -> username;
+            cu -> score = temp -> score;
+            cu -> grade = temp -> grade;
+            return;
+        }
+
+        cu = cu -> next;
     }
+
+    tail -> next = temp;
+    tail = temp;
+    size++;
 }
 
 void linkedList::extractAndPopulate(std::string in_Str, int &size) //Extracting id, username, score, and grade
@@ -454,47 +510,25 @@ Node* linkedList::getHead()
     return head;
 }
 
-void linkedList::deleteD(Node* h, Node* p)
-{
-    Node* cu = h;
-
-    while(cu -> next != nullptr)
-    {
-        if(p -> id == cu -> id)
-        {
-            cu -> id = p -> id;
-            cu -> username = p -> username;
-            cu -> score = p -> score;
-            cu -> grade = p -> grade;
-        }
-
-        else if(p -> username == cu -> username)
-        {
-            return
-        }
-
-        cu = cu -> next;
-    }
-}
-
 int main(int argc, char* argv[])
 {
     linkedList list;
 
     ArgumentManager am(argc, argv);
 
-    // string input = am.get("input1.txt");
-    // string command = am.get("command1.txt");
-    // string output = am.get("output1.txt");
+    string input = am.get("input1.txt");
+    string command = am.get("command1.txt");
+    string output = am.get("output1.txt");
 
-    ifstream inPut("input1.txt");
-    ifstream comm("command1.txt");
-    ofstream outPut("output1.txt");
+    ifstream inPut(input);
+    ifstream comm(command);
+    ofstream outPut(output);
 
     Node* student = new Node;
     int i = 0;
     std::string temp;
     std::vector<string> arr;
+    std::vector<string> outArr;
     int sizeOfList = 0;
 
     while(!inPut.eof())
@@ -632,5 +666,19 @@ int main(int argc, char* argv[])
             list.extractAndPopulate(TBP, sizeOfList);
         }
     }
-    list.printLL();
+
+    list.cpy(outArr);
+    for(int i = 0; i < outArr.size(); i++)
+    {
+        if(outArr[i] == "]")
+        {
+            outPut << outArr[i] << std::endl;
+        }
+
+        else
+        {
+            outPut << outArr[i];
+        }
+    }
+    //list.printLL();
 }
