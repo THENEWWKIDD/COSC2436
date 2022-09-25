@@ -7,4 +7,4 @@
 [id:8374;username:hank;score:64;grade:D]
 [id:8364;username:bruce;score:60;grade:D]
 [id:7694;username:vision;score:98;grade:A]
-[id:3233;username:peter;score:43;grade:F]
+[id:8392;username:sonic;score:57;grade:F]
