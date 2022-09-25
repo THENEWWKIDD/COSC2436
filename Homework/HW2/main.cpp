@@ -99,26 +99,35 @@ void linkedList::cpy(std::vector<string> &in)
         while(cu -> next != nullptr)
         {
             in.push_back("[");
+            in.push_back("id:");
             in.push_back(cu -> id);
             in.push_back(";");
+            in.push_back("username:");
             in.push_back(cu -> username);
             in.push_back(";");
+            in.push_back("score:");
             in.push_back(cu -> score );
             in.push_back(";");
+            in.push_back("grade:");
             in.push_back(cu -> grade);
             in.push_back("]");
             cu = cu -> next;
         }
 
         in.push_back("[");
-        in.push_back(cu -> id);
-        in.push_back(";");
-        in.push_back(cu -> username);
-        in.push_back(";");
-        in.push_back(cu -> score);
-        in.push_back(";");
-        in.push_back(cu -> grade);
-        in.push_back("]");
+            in.push_back("id:");
+            in.push_back(cu -> id);
+            in.push_back(";");
+            in.push_back("username:");
+            in.push_back(cu -> username);
+            in.push_back(";");
+            in.push_back("score:");
+            in.push_back(cu -> score );
+            in.push_back(";");
+            in.push_back("grade:");
+            in.push_back(cu -> grade);
+            in.push_back("]");
+            cu = cu -> next;
     }
 }
 
@@ -176,7 +185,7 @@ void linkedList::addAtEnd(std::string ID, std::string USR, std::string SCR, std:
         return;
     }
 
-    while(cu -> next != nullptr)
+    while(cu != nullptr)
     {
         if(cu -> username == temp -> username && cu -> id != temp -> id)
         {
@@ -256,7 +265,12 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
     temp -> score = SCR;
     temp -> grade = GRD;
 
-    if(isEmpty() && pos != 0)
+    if(temp -> id == "" || temp -> username == "" || temp -> score == "" || temp -> grade == "")
+    {
+        return;
+    }
+
+    else if(isEmpty() && pos != 0)
     {
         return;
         // head = temp;
@@ -266,18 +280,7 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
     else if(isEmpty() && pos == 0)
     {
         addAtEnd(ID, USR, SCR, GRD, size);
-
-        // if(temp -> id == "" || temp -> username == "" || temp -> score == "" || temp -> grade == "")
-        // {
-        //     return;
-        // }
-
-        // else
-        // {
-        //     head = temp;
-        //     tail = temp;
-        //     size++;
-        // }
+        return;
     }
 
     else if(pos > size)
@@ -285,10 +288,10 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
         return;
     }
 
-    else if(temp -> id == "" || temp -> username == "" || temp -> score == "" || temp -> grade == "")
-    {
-        return;
-    }
+    // else if(pos == size)
+    // {
+    //     addAtEnd(ID, USR, SCR, GRD, size);
+    // }
 
     Node* cu = head;
     Node* prev = nullptr;
@@ -301,6 +304,7 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
             return;
         }
 
+
         else if(cu -> id == temp -> id)
         {
             cu -> id = temp -> id;
@@ -310,29 +314,29 @@ void linkedList::add(int pos, std::string ID, std::string USR, std::string SCR, 
             return;
         }
 
-        else
+        else if(pos == position)
         {
-            if(pos == 0)
-            {
-                addAtBeg(ID, USR, SCR, GRD, size);
-                break;
-            }
-
-            else if(pos == position)
-            {
-                temp -> next = cu;
-                prev -> next = temp;
-                cu = cu -> next;
-                break;
-            }
-
-            else
-            {
-                prev = cu;
-                cu = cu -> next;
-                position++;
-            }
+            temp -> next = cu;
+            prev -> next = temp;
+            cu = cu -> next;
+            break;
         }
+
+
+        prev = cu;
+        cu = cu -> next;
+        position++;
+
+    }
+
+    if(pos == 0)
+    {
+        addAtBeg(ID, USR, SCR, GRD, size);
+    }
+
+     else if(pos == size)
+    {
+        addAtEnd(ID, USR, SCR, GRD, size);
     }
 }
 
@@ -496,6 +500,8 @@ void linkedList::insertionSort(Node* headref, std::string data)
     {
         sorted = NULL;
         Node* current = headref;
+        Node* cu = head;
+        Node* prev = nullptr;
         while (current != NULL) 
         {
             Node* next = current->next;
@@ -503,6 +509,15 @@ void linkedList::insertionSort(Node* headref, std::string data)
             current = next;
         }
         head = sorted;
+
+
+        while(cu != nullptr)
+        {
+            prev = cu;
+            cu = cu -> next;
+        }
+        tail = prev;
+        
     }
 
 Node* linkedList::getHead()
@@ -516,13 +531,13 @@ int main(int argc, char* argv[])
 
     ArgumentManager am(argc, argv);
 
-    string input = am.get("input1.txt");
-    string command = am.get("command1.txt");
-    string output = am.get("output1.txt");
+    // string input = am.get("input1.txt");
+    // string command = am.get("command1.txt");
+    // string output = am.get("output1.txt");
 
-    ifstream inPut(input);
-    ifstream comm(command);
-    ofstream outPut(output);
+    ifstream inPut("input3.txt");
+    ifstream comm("command3.txt");
+    ofstream outPut("output1.txt");
 
     Node* student = new Node;
     int i = 0;
@@ -549,6 +564,14 @@ int main(int argc, char* argv[])
         temp.erase(remove(temp.begin(), temp.end(), ' '), temp.end());
         arr.push_back(temp);
         temp = "";
+    }
+
+    for(int i = 0; i < arr.size(); i++)
+    {
+        if(arr[i] == "")
+        {
+            arr.erase(arr.begin() + i);
+        }
     }
 
     for(int i = 0; i < arr.size(); i++)
@@ -610,16 +633,7 @@ int main(int argc, char* argv[])
                 data = "";
             }
 
-            if(id == "" || user == "" || score == "" || grade == "")
-            {
-                break;
-            }
-
-            else
-            {
-                list.add(position, id, user, score, grade, sizeOfList);
-            }
-            
+            list.add(position, id, user, score, grade, sizeOfList);
             //std::cout << "Needs to be added" << endl;
         }
 
