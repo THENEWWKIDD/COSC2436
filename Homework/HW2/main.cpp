@@ -2,43 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "Node.h"
 #include "/home/bigtasty/COSC2436/ArgumentManager.h"
-
-struct Node
-{
-    Node* next = nullptr;
-
-    string id;
-    string score;
-    string grade;
-    string username;
-};
-
-class linkedList
-{
-    public:
-    void sort(std::string type);
-    void remove(std::string cred, int &size);
-    
-    bool isEmpty();
-    void printLL();
-    Node* getHead();
-    void removeHead();
-    void cpy(std::vector<string> &in);
-    void extractAndPopulate(std::string input, int &size);
-    void insertionSort(Node* p, std::string data); //Function was modified from a G4G solution
-    void sortedInsert(Node* p, std::string data); //Function was modified from a G4G solution
-
-    void addAtEnd(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
-    void addAtBeg(std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
-    void add(int pos, std::string ID, std::string USR, std::string SCR, std::string GRD, int &size);
-    
-    private:
-
-    Node* head = nullptr;
-    Node* tail = nullptr;
-    Node* sorted = nullptr;
-};
 
 bool linkedList::isEmpty()
 {
@@ -518,9 +483,9 @@ int main(int argc, char* argv[])
 
     ArgumentManager am(argc, argv);
 
-    string input = am.get("input1.txt");
-    string command = am.get("command1.txt");
-    string output = am.get("output1.txt");
+    string input = am.get("input");
+    string command = am.get("command");
+    string output = am.get("output");
 
     ifstream inPut(input);
     ifstream comm(command);
