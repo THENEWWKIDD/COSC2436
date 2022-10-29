@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
     // string input = am.get("input");
     // string output = am.get("output");
 
-    ifstream inPut("input2.txt");
+    ifstream inPut("input1.txt");
     ofstream outPut("output.txt");
 
     linkedList listOfElements;
